@@ -1,9 +1,11 @@
 /* flutter */
 import 'package:flutter/material.dart';
-import 'package:mobile_app/constants/colors.dart';
+import 'package:mobile_app/constants/palette.dart';
 
 class Labels extends StatelessWidget {
-  const Labels({Key? key}) : super(key: key);
+  final String route;
+
+  const Labels({Key? key, required this.route}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -11,16 +13,17 @@ class Labels extends StatelessWidget {
       alignment: Alignment.center,
       child: Column(
         children: <Widget>[
-          const Text(
-            'No account yet?',
-            style:
-                TextStyle(color: Colors.black38, fontWeight: FontWeight.w500),
+          Text(
+            route == 'register'
+                ? 'No account yet?'
+                : 'Do you already have an account?',
+            style: const TextStyle(
+                color: Colors.black38, fontWeight: FontWeight.w500),
           ),
           TextButton(
-              onPressed: () {},
-              child: Text('Sign up',
-                  style:
-                      TextStyle(color: Color(colors[Palette.primary] as int))))
+              onPressed: () => Navigator.pushReplacementNamed(context, route),
+              child: Text(route == 'register' ? 'Sign up' : 'Sign in',
+                  style: const TextStyle(color: Palette.primary)))
         ],
       ),
     );

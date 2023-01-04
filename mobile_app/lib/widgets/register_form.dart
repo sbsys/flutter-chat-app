@@ -3,17 +3,21 @@ import 'package:flutter/material.dart';
 /* widgets */
 import 'package:mobile_app/widgets/custom_input.dart';
 import 'package:mobile_app/widgets/custom_button.dart';
+/* types */
+import 'package:mobile_app/constants/palette.dart';
 
-class LoginForm extends StatefulWidget {
-  const LoginForm({Key? key}) : super(key: key);
+class RegisterForm extends StatefulWidget {
+  const RegisterForm({Key? key}) : super(key: key);
 
   @override
-  LoginFormState createState() => LoginFormState();
+  RegisterFormState createState() => RegisterFormState();
 }
 
-class LoginFormState extends State<LoginForm> {
+class RegisterFormState extends State<RegisterForm> {
+  final nameCtrl = TextEditingController();
   final emailCtrl = TextEditingController();
   final passCtrl = TextEditingController();
+  final confirmCtrl = TextEditingController();
 
   @override
   Widget build(BuildContext context) {
@@ -22,6 +26,12 @@ class LoginFormState extends State<LoginForm> {
       child: Column(
         children: <Widget>[
           CustomInput(
+            icon: Icons.perm_identity_outlined,
+            placeholder: 'Name',
+            textController: nameCtrl,
+          ),
+          const SizedBox(height: 16),
+          CustomInput(
             icon: Icons.email_outlined,
             placeholder: 'Email',
             keyboardType: TextInputType.emailAddress,
@@ -29,15 +39,23 @@ class LoginFormState extends State<LoginForm> {
           ),
           const SizedBox(height: 16),
           CustomInput(
-            icon: Icons.lock_outline,
+            icon: Icons.lock_outlined,
             placeholder: 'Password',
             textController: passCtrl,
             isPassword: true,
           ),
           const SizedBox(height: 16),
+          CustomInput(
+            icon: Icons.sync_lock_outlined,
+            placeholder: 'Confirm password',
+            textController: confirmCtrl,
+            isPassword: true,
+          ),
+          const SizedBox(height: 16),
           CustomButton(
             onPressed: () {},
-            text: 'Sign in',
+            text: 'Sign up',
+            fillColor: Palette.secondary,
           ),
         ],
       ),

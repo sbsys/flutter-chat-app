@@ -1,10 +1,12 @@
 /* flutter */
 import 'package:flutter/material.dart';
 /* types */
-import 'package:mobile_app/constants/colors.dart';
+import 'package:mobile_app/constants/palette.dart';
 
 class Logo extends StatelessWidget {
-  const Logo({Key? key}) : super(key: key);
+  final String title;
+
+  const Logo({Key? key, this.title = 'Flutter Chat'}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -14,17 +16,17 @@ class Logo extends StatelessWidget {
         alignment: Alignment.topCenter,
         child: Column(
           children: <Widget>[
-            Icon(
+            const Icon(
               Icons.chat,
               size: 160,
-              color: Color(colors[Palette.primary] as int),
+              color: Palette.primary,
             ),
             const SizedBox(
               height: 8,
             ),
-            const Text(
-              'Flutter Chat',
-              style: TextStyle(fontSize: 32),
+            Text(
+              title,
+              style: const TextStyle(fontSize: 32),
             )
           ],
         ),

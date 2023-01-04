@@ -2,14 +2,14 @@
 import 'package:flutter/material.dart';
 /* widgets */
 import 'package:mobile_app/widgets/logo.dart';
-import 'package:mobile_app/widgets/login_form.dart';
+import 'package:mobile_app/widgets/register_form.dart';
 import 'package:mobile_app/widgets/labels.dart';
 import 'package:mobile_app/widgets/terms.dart';
 /* types */
 import 'package:mobile_app/constants/palette.dart';
 
-class LoginPage extends StatelessWidget {
-  const LoginPage({Key? key}) : super(key: key);
+class RegisterPage extends StatelessWidget {
+  const RegisterPage({Key? key}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -24,9 +24,9 @@ class LoginPage extends StatelessWidget {
             child: Column(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: const <Widget>[
-                Logo(),
-                LoginForm(),
-                Labels(route: 'register'),
+                Logo(title: 'Register'),
+                RegisterForm(),
+                Labels(route: 'login'),
                 Terms(),
               ],
             ),
