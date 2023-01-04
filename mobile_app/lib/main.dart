@@ -13,7 +13,7 @@ class Main extends StatelessWidget {
     return MaterialApp(
       debugShowCheckedModeBanner: false,
       title: 'Flutter Chat',
-      initialRoute: 'login',
+      initialRoute: 'users',
       routes: routes,
     );
   }
