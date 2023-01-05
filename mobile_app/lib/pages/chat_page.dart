@@ -7,6 +7,13 @@ import 'package:mobile_app/models/message.dart';
 /* types */
 import 'package:mobile_app/constants/palette.dart';
 
+class Message {
+  MessageListItem message;
+  AnimationController animCtrl;
+
+  Message({required this.message, required this.animCtrl});
+}
+
 class ChatPage extends StatefulWidget {
   const ChatPage({Key? key}) : super(key: key);
 
@@ -14,13 +21,22 @@ class ChatPage extends StatefulWidget {
   State<ChatPage> createState() => _ChatPageState();
 }
 
-class _ChatPageState extends State<ChatPage> {
+class _ChatPageState extends State<ChatPage> with TickerProviderStateMixin {
   final _messageCtrl = TextEditingController();
   final _focusNode = FocusNode();
 
   bool _hasText = false;
 
-  final List<MessageListItem> _messages = [];
+  final List<Message> _messages = [];
+
+  @override
+  void dispose() {
+    for (var message in _messages) {
+      message.animCtrl.dispose();
+    }
+
+    super.dispose();
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -61,7 +77,8 @@ class _ChatPageState extends State<ChatPage> {
               child: ListView.separated(
                 physics: const BouncingScrollPhysics(),
                 itemBuilder: ((context, index) => ChatMessage(
-                      message: _messages[index],
+                      message: _messages[index].message,
+                      animCtrl: _messages[index].animCtrl,
                     )),
                 separatorBuilder: (context, index) => Container(height: 8),
                 reverse: true,
@@ -116,13 +133,24 @@ class _ChatPageState extends State<ChatPage> {
     _messageCtrl.clear();
     _focusNode.requestFocus();
 
+    AnimationController animCtrl = AnimationController(
+      duration: const Duration(milliseconds: 300),
+      vsync: this,
+    );
+
     _messages.insert(
-        0,
-        MessageListItem(
+      0,
+      Message(
+        message: MessageListItem(
           id: '${_messages.length + 1}',
           text: value.trim(),
           isOwn: (_messages.length + 1) % 2 == 0,
-        ));
+        ),
+        animCtrl: animCtrl,
+      ),
+    );
+
+    animCtrl.forward();
 
     setState(() {
       _hasText = false;
