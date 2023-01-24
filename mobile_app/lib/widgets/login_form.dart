@@ -1,8 +1,11 @@
 /* flutter */
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 /* widgets */
 import 'package:mobile_app/widgets/custom_input.dart';
 import 'package:mobile_app/widgets/custom_button.dart';
+/* services */
+import 'package:mobile_app/services/auth_service.dart';
 
 class LoginForm extends StatefulWidget {
   const LoginForm({Key? key}) : super(key: key);
@@ -36,7 +39,14 @@ class LoginFormState extends State<LoginForm> {
           ),
           const SizedBox(height: 16),
           CustomButton(
-            onPressed: () {},
+            onPressed: () {
+              final authService = Provider.of<AuthService>(
+                context,
+                listen: false,
+              );
+
+              authService.signIn(emailCtrl.text, passCtrl.text);
+            },
             text: 'Sign in',
           ),
         ],
