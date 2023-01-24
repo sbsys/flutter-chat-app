@@ -1,5 +1,6 @@
 /* flutter */
 import 'package:flutter/material.dart';
+import 'package:mobile_app/widgets/alert.dart';
 import 'package:provider/provider.dart';
 /* widgets */
 import 'package:mobile_app/widgets/custom_input.dart';
@@ -20,6 +21,8 @@ class LoginFormState extends State<LoginForm> {
 
   @override
   Widget build(BuildContext context) {
+    final authService = Provider.of<AuthService>(context);
+
     return Container(
       alignment: Alignment.center,
       child: Column(
@@ -39,15 +42,23 @@ class LoginFormState extends State<LoginForm> {
           ),
           const SizedBox(height: 16),
           CustomButton(
-            onPressed: () {
-              final authService = Provider.of<AuthService>(
-                context,
-                listen: false,
-              );
+            onPressed: () async {
+              FocusScope.of(context).unfocus();
 
-              authService.signIn(emailCtrl.text, passCtrl.text);
+              final isAuth =
+                  await authService.signIn(emailCtrl.text, passCtrl.text);
+
+              if (isAuth) {
+                // ignore: use_build_context_synchronously
+                Navigator.pushReplacementNamed(context, 'users');
+              } else {
+                // ignore: use_build_context_synchronously
+                showAlert(
+                    context, 'No authenticated', 'Verify your credentials');
+              }
             },
             text: 'Sign in',
+            isLoading: authService.isSignInProcess,
           ),
         ],
       ),

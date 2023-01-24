@@ -14,26 +14,26 @@ class UsersPage extends StatefulWidget {
 }
 
 class _UsersPageState extends State<UsersPage> {
-  final List<UserListItem> users = [
-    UserListItem(
+  final List<User> users = [
+    User(
       id: '1',
       name: 'José Moncada',
       email: 'jose.moncada@mail.com',
       online: true,
     ),
-    UserListItem(
+    User(
       id: '2',
       name: 'Siegfried Moncada',
       email: 'siegfried.moncada@mail.com',
       online: true,
     ),
-    UserListItem(
+    User(
       id: '3',
       name: 'Jeorge Gutierrez',
       email: 'jeorge.gutierrez@mail.com',
       online: false,
     ),
-    UserListItem(
+    User(
       id: '4',
       name: 'Sara Corrales',
       email: 'sara.corrales@mail.com',
@@ -47,7 +47,7 @@ class _UsersPageState extends State<UsersPage> {
     await Future.delayed(const Duration(milliseconds: 1000));
 
     users.add(
-      UserListItem(
+      User(
         id: '5',
         name: 'Ashley López',
         email: 'ashley.lopez@mail.com',
@@ -98,7 +98,7 @@ class _UsersPageState extends State<UsersPage> {
           onRefresh: _onRefresh,
           child: ListView.separated(
             physics: const BouncingScrollPhysics(),
-            itemBuilder: ((_, index) => _userListItem(users[index])),
+            itemBuilder: ((_, index) => _User(users[index])),
             separatorBuilder: ((_, index) => const Divider()),
             itemCount: users.length,
           ),
@@ -107,7 +107,7 @@ class _UsersPageState extends State<UsersPage> {
     );
   }
 
-  ListTile _userListItem(UserListItem user) => ListTile(
+  ListTile _User(User user) => ListTile(
         leading: CircleAvatar(
           backgroundColor: user.online ? Palette.primary : Palette.accent,
           child: Text(

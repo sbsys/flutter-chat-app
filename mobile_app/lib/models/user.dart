@@ -1,20 +1,34 @@
-class UserListItem {
-  String id;
-  String name;
-  String email;
-  bool online;
+/* flutter */
+import 'dart:convert';
 
-  UserListItem({
-    required this.id,
+User userFromJson(String str) => User.fromJson(json.decode(str));
+
+String userToJson(User data) => json.encode(data.toJson());
+
+class User {
+  User({
     required this.name,
     required this.email,
     required this.online,
+    required this.id,
   });
 
-  factory UserListItem.fromMap(Map<String, dynamic> obj) => UserListItem(
-        id: obj['id'],
-        name: obj['name'],
-        email: obj['votes'],
-        online: obj['online'],
+  String name;
+  String email;
+  bool online;
+  String id;
+
+  factory User.fromJson(Map<String, dynamic> json) => User(
+        name: json["name"],
+        email: json["email"],
+        online: json["online"],
+        id: json["id"],
       );
+
+  Map<String, dynamic> toJson() => {
+        "name": name,
+        "email": email,
+        "online": online,
+        "id": id,
+      };
 }

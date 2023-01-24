@@ -8,20 +8,22 @@ class CustomButton extends StatelessWidget {
   final Color textColor;
   final void Function() onPressed;
   final String text;
+  final bool isLoading;
 
-  const CustomButton(
-      {Key? key,
-      this.fillColor = Palette.primary,
-      this.textColor = Colors.white,
-      required this.onPressed,
-      required this.text})
-      : super(key: key);
+  const CustomButton({
+    Key? key,
+    this.fillColor = Palette.primary,
+    this.textColor = Colors.white,
+    required this.onPressed,
+    required this.text,
+    this.isLoading = false,
+  }) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
     return MaterialButton(
-      onPressed: onPressed,
-      color: fillColor,
+      onPressed: isLoading ? () {} : onPressed,
+      color: isLoading ? Colors.grey : fillColor,
       elevation: 2,
       shape: const StadiumBorder(),
       child: SizedBox(
