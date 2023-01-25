@@ -3,7 +3,8 @@ import 'package:flutter/material.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'dart:convert';
 import 'package:http/http.dart' as http;
-import 'package:mobile_app/models/sign_in_response.dart';
+import 'package:mobile_app/models/auth.dart';
+import 'package:mobile_app/models/response.dart';
 /* models */
 import 'package:mobile_app/models/user.dart';
 /* env */
@@ -39,7 +40,8 @@ class AuthService with ChangeNotifier {
         return false;
       }
 
-      final signInResponse = signInResponseFromJson(response.body);
+      final signInResponse =
+          responseFromJson(response.body, AuthResponseFactory());
 
       user = signInResponse.data.user;
 
@@ -58,7 +60,7 @@ class AuthService with ChangeNotifier {
   Future _storeToken(String token) async =>
       await _storage.write(key: 'token', value: token);
 
-  Future _removeToken() async => await _storage.delete(key: 'token');
+  /* Future _removeToken() async => await _storage.delete(key: 'token'); */
 
   static Future<String> getToken() async {
     const storage = FlutterSecureStorage();

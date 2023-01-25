@@ -98,7 +98,7 @@ class _UsersPageState extends State<UsersPage> {
           onRefresh: _onRefresh,
           child: ListView.separated(
             physics: const BouncingScrollPhysics(),
-            itemBuilder: ((_, index) => _User(users[index])),
+            itemBuilder: ((_, index) => _user(users[index])),
             separatorBuilder: ((_, index) => const Divider()),
             itemCount: users.length,
           ),
@@ -107,7 +107,7 @@ class _UsersPageState extends State<UsersPage> {
     );
   }
 
-  ListTile _User(User user) => ListTile(
+  ListTile _user(User user) => ListTile(
         leading: CircleAvatar(
           backgroundColor: user.online ? Palette.primary : Palette.accent,
           child: Text(

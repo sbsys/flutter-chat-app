@@ -1,34 +1,38 @@
-/* flutter */
-import 'dart:convert';
-
-User userFromJson(String str) => User.fromJson(json.decode(str));
-
-String userToJson(User data) => json.encode(data.toJson());
+/* models */
+import 'package:mobile_app/models/response.dart';
 
 class User {
-  User({
-    required this.name,
-    required this.email,
-    required this.online,
-    required this.id,
-  });
-
+  String id;
   String name;
   String email;
   bool online;
-  String id;
 
-  factory User.fromJson(Map<String, dynamic> json) => User(
-        name: json["name"],
-        email: json["email"],
-        online: json["online"],
-        id: json["id"],
+  User({
+    required this.id,
+    required this.name,
+    required this.email,
+    required this.online,
+  });
+}
+
+class UserFactory extends Factory<User> {
+  @override
+  User fromJson(Map<String, dynamic> json) => User(
+        id: json["id"] ?? '',
+        name: json["name"] ?? '',
+        email: json["email"] ?? '',
+        online: json["online"] ?? false,
       );
 
-  Map<String, dynamic> toJson() => {
-        "name": name,
-        "email": email,
-        "online": online,
-        "id": id,
-      };
+  @override
+  Map<String, dynamic> toJson(User? obj) {
+    if (obj == null) return {};
+
+    return {
+      "id": obj.id,
+      "name": obj.name,
+      "email": obj.email,
+      "online": obj.online,
+    };
+  }
 }

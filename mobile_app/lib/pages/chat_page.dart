@@ -63,7 +63,7 @@ class _ChatPageState extends State<ChatPage> with TickerProviderStateMixin {
                 height: 12,
                 margin: const EdgeInsets.only(right: 16),
                 decoration: BoxDecoration(
-                  color: false ? Palette.primary : Palette.accent,
+                  color: /* false ? Palette.primary :  */ Palette.accent,
                   borderRadius: BorderRadius.circular(100),
                 ),
               ),
