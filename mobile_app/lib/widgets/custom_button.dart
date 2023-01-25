@@ -24,7 +24,7 @@ class CustomButton extends StatelessWidget {
     return MaterialButton(
       onPressed: isLoading ? () {} : onPressed,
       color: isLoading ? Colors.grey : fillColor,
-      elevation: 2,
+      elevation: isLoading ? 0 : 2,
       shape: const StadiumBorder(),
       child: SizedBox(
         width: double.infinity,

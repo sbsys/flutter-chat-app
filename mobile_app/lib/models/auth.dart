@@ -14,10 +14,14 @@ class AuthResponse {
 
 class AuthResponseFactory extends Factory<AuthResponse> {
   @override
-  AuthResponse fromJson(Map<String, dynamic> json) => AuthResponse(
-        user: UserFactory().fromJson(json['user'] ?? {}),
-        token: json['token'] ?? '',
-      );
+  AuthResponse fromJson(Map<String, dynamic>? json) {
+    json ??= {};
+
+    return AuthResponse(
+      user: UserFactory().fromJson(json['user'] ?? {}),
+      token: json['token'] ?? '',
+    );
+  }
 
   @override
   Map<String, dynamic> toJson(AuthResponse? obj) {

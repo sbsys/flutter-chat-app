@@ -45,17 +45,16 @@ class LoginFormState extends State<LoginForm> {
             onPressed: () async {
               FocusScope.of(context).unfocus();
 
-              final isAuth =
+              final auth =
                   await authService.signIn(emailCtrl.text, passCtrl.text);
 
-              if (isAuth) {
+              if (!auth.status) {
                 // ignore: use_build_context_synchronously
-                Navigator.pushReplacementNamed(context, 'users');
-              } else {
-                // ignore: use_build_context_synchronously
-                showAlert(
-                    context, 'No authenticated', 'Verify your credentials');
+                return showAlert(context, 'No authenticated', auth.message);
               }
+
+              // ignore: use_build_context_synchronously
+              Navigator.pushReplacementNamed(context, 'users');
             },
             text: 'Sign in',
             isLoading: authService.isSignInProcess,

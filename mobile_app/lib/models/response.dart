@@ -1,7 +1,7 @@
 import 'dart:convert';
 
 abstract class Factory<T> {
-  T fromJson(Map<String, dynamic> json);
+  T fromJson(Map<String, dynamic>? json);
   Map<String, dynamic> toJson(T? obj);
 }
 

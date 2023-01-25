@@ -17,12 +17,16 @@ class User {
 
 class UserFactory extends Factory<User> {
   @override
-  User fromJson(Map<String, dynamic> json) => User(
-        id: json["id"] ?? '',
-        name: json["name"] ?? '',
-        email: json["email"] ?? '',
-        online: json["online"] ?? false,
-      );
+  User fromJson(Map<String, dynamic>? json) {
+    json ??= {};
+
+    return User(
+      id: json["id"] ?? '',
+      name: json["name"] ?? '',
+      email: json["email"] ?? '',
+      online: json["online"] ?? false,
+    );
+  }
 
   @override
   Map<String, dynamic> toJson(User? obj) {

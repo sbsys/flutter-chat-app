@@ -13,6 +13,13 @@ import 'package:mobile_app/env/env.dart';
 class AuthService with ChangeNotifier {
   late User user;
 
+  bool _isSignUpProcess = false;
+  bool get isSignUpProcess => _isSignUpProcess;
+  set isSignUpProcess(bool value) {
+    _isSignUpProcess = value;
+    notifyListeners();
+  }
+
   bool _isSignInProcess = false;
   bool get isSignInProcess => _isSignInProcess;
   set isSignInProcess(bool value) {
@@ -20,9 +27,49 @@ class AuthService with ChangeNotifier {
     notifyListeners();
   }
 
+  bool _isSignInByTokenProcess = false;
+  bool get isSignInByTokenProcess => _isSignInByTokenProcess;
+  set isSignInByTokenProcess(bool value) {
+    _isSignInByTokenProcess = value;
+    notifyListeners();
+  }
+
   final _storage = const FlutterSecureStorage();
 
-  Future<bool> signIn(String email, String password) async {
+  Future<Response<User>> signUp(
+      String name, String email, String password) async {
+    isSignUpProcess = true;
+
+    final data = {
+      'name': name.trim(),
+      'email': email.trim(),
+      'password': password.trim()
+    };
+
+    try {
+      final response = await http.post(
+        Env.getURL('/auth/sign-up'),
+        body: jsonEncode(data),
+        headers: {'Content-Type': 'application/json'},
+      ).timeout(const Duration(seconds: 5));
+
+      final signUpResponse = responseFromJson(response.body, UserFactory());
+
+      isSignUpProcess = false;
+
+      return signUpResponse;
+    } catch (e) {
+      isSignUpProcess = false;
+
+      return Response(
+        status: false,
+        message: e.toString(),
+        data: UserFactory().fromJson({}),
+      );
+    }
+  }
+
+  Future<Response<AuthResponse>> signIn(String email, String password) async {
     isSignInProcess = true;
 
     final data = {'email': email.trim(), 'password': password.trim()};
@@ -34,26 +81,71 @@ class AuthService with ChangeNotifier {
         headers: {'Content-Type': 'application/json'},
       ).timeout(const Duration(seconds: 5));
 
-      if (response.statusCode != 200) {
-        isSignInProcess = false;
-
-        return false;
-      }
-
       final signInResponse =
           responseFromJson(response.body, AuthResponseFactory());
 
       user = signInResponse.data.user;
 
-      await _storeToken(signInResponse.data.token);
+      if (response.statusCode == 200) {
+        await _storeToken(signInResponse.data.token);
+      }
 
       isSignInProcess = false;
 
-      return true;
+      return signInResponse;
     } catch (e) {
       isSignInProcess = false;
 
-      return false;
+      return Response(
+        status: false,
+        message: e.toString(),
+        data: AuthResponseFactory().fromJson({}),
+      );
+    }
+  }
+
+  Future<Response<AuthResponse>> signInByToken() async {
+    isSignInByTokenProcess = true;
+
+    try {
+      final token = await getToken();
+
+      if (token.isEmpty) {
+        return Response(
+          status: false,
+          message: 'Your session has expired',
+          data: AuthResponseFactory().fromJson({}),
+        );
+      }
+
+      final response = await http.get(
+        Env.getURL('/auth/sign-in'),
+        headers: {
+          'Content-Type': 'application/json',
+          'x-token': token,
+        },
+      ).timeout(const Duration(seconds: 5));
+
+      final signInByTokenResponse =
+          responseFromJson(response.body, AuthResponseFactory());
+
+      user = signInByTokenResponse.data.user;
+
+      if (response.statusCode == 200) {
+        await _storeToken(signInByTokenResponse.data.token);
+      }
+
+      isSignInByTokenProcess = false;
+
+      return signInByTokenResponse;
+    } catch (e) {
+      isSignInByTokenProcess = false;
+
+      return Response(
+        status: false,
+        message: e.toString(),
+        data: AuthResponseFactory().fromJson({}),
+      );
     }
   }
 
