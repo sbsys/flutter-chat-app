@@ -21,7 +21,7 @@ class Main extends StatelessWidget {
       child: MaterialApp(
         debugShowCheckedModeBanner: false,
         title: 'Flutter Chat',
-        initialRoute: 'login',
+        initialRoute: 'loading',
         routes: routes,
       ),
     );

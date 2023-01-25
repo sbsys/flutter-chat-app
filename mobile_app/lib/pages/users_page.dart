@@ -1,5 +1,7 @@
 /* flutter */
 import 'package:flutter/material.dart';
+import 'package:mobile_app/services/auth_service.dart';
+import 'package:provider/provider.dart';
 import 'package:pull_to_refresh/pull_to_refresh.dart';
 /* models */
 import 'package:mobile_app/models/user.dart';
@@ -63,6 +65,8 @@ class _UsersPageState extends State<UsersPage> {
 
   @override
   Widget build(BuildContext context) {
+    final authService = Provider.of<AuthService>(context);
+
     return SafeArea(
       child: Scaffold(
         appBar: AppBar(
@@ -73,10 +77,15 @@ class _UsersPageState extends State<UsersPage> {
               Icons.exit_to_app_outlined,
               color: Colors.black54,
             ),
-            onPressed: () {},
+            onPressed: () async {
+              await authService.signOut();
+
+              // ignore: use_build_context_synchronously
+              Navigator.pushReplacementNamed(context, 'login');
+            },
           ),
-          title: const Text('Steven Bustillo',
-              style: TextStyle(
+          title: Text(authService.user?.name ?? '',
+              style: const TextStyle(
                 color: Colors.black54,
               )),
           actions: <Widget>[

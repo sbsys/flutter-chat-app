@@ -11,7 +11,7 @@ import 'package:mobile_app/models/user.dart';
 import 'package:mobile_app/env/env.dart';
 
 class AuthService with ChangeNotifier {
-  late User user;
+  late User? user;
 
   bool _isSignUpProcess = false;
   bool get isSignUpProcess => _isSignUpProcess;
@@ -24,13 +24,6 @@ class AuthService with ChangeNotifier {
   bool get isSignInProcess => _isSignInProcess;
   set isSignInProcess(bool value) {
     _isSignInProcess = value;
-    notifyListeners();
-  }
-
-  bool _isSignInByTokenProcess = false;
-  bool get isSignInByTokenProcess => _isSignInByTokenProcess;
-  set isSignInByTokenProcess(bool value) {
-    _isSignInByTokenProcess = value;
     notifyListeners();
   }
 
@@ -105,8 +98,6 @@ class AuthService with ChangeNotifier {
   }
 
   Future<Response<AuthResponse>> signInByToken() async {
-    isSignInByTokenProcess = true;
-
     try {
       final token = await getToken();
 
@@ -135,12 +126,8 @@ class AuthService with ChangeNotifier {
         await _storeToken(signInByTokenResponse.data.token);
       }
 
-      isSignInByTokenProcess = false;
-
       return signInByTokenResponse;
     } catch (e) {
-      isSignInByTokenProcess = false;
-
       return Response(
         status: false,
         message: e.toString(),
@@ -149,10 +136,15 @@ class AuthService with ChangeNotifier {
     }
   }
 
+  Future signOut() async {
+    user = null;
+    await _removeToken();
+  }
+
   Future _storeToken(String token) async =>
       await _storage.write(key: 'token', value: token);
 
-  /* Future _removeToken() async => await _storage.delete(key: 'token'); */
+  Future _removeToken() async => await _storage.delete(key: 'token');
 
   static Future<String> getToken() async {
     const storage = FlutterSecureStorage();
