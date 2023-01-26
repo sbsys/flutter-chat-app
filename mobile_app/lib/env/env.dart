@@ -1,8 +1,12 @@
 class Env {
-  static String apiUrl = 'http://192.168.1.6:3000/api';
-  static String wsUrl = 'http://192.168.1.6:3000/ws';
+  static const String _apiUrl = 'http://192.168.1.6:3000/api';
+  static const String _wsUrl = 'http://192.168.1.6:3000';
 
   static Uri getURL(String path) {
-    return Uri.parse('$apiUrl$path');
+    return Uri.parse('$_apiUrl$path');
+  }
+
+  static String getWS() {
+    return _wsUrl;
   }
 }

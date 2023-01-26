@@ -1,10 +1,12 @@
 /* flutter */
 import 'package:flutter/material.dart';
-import 'package:mobile_app/services/auth_service.dart';
 import 'package:provider/provider.dart';
 import 'package:pull_to_refresh/pull_to_refresh.dart';
 /* models */
 import 'package:mobile_app/models/user.dart';
+/* services */
+import 'package:mobile_app/services/auth_service.dart';
+import 'package:mobile_app/services/socket_service.dart';
 /* types */
 import 'package:mobile_app/constants/palette.dart';
 
@@ -66,6 +68,7 @@ class _UsersPageState extends State<UsersPage> {
   @override
   Widget build(BuildContext context) {
     final authService = Provider.of<AuthService>(context);
+    final socketService = Provider.of<SocketService>(context);
 
     return SafeArea(
       child: Scaffold(
@@ -80,6 +83,8 @@ class _UsersPageState extends State<UsersPage> {
             onPressed: () async {
               await authService.signOut();
 
+              socketService.disconnect();
+
               // ignore: use_build_context_synchronously
               Navigator.pushReplacementNamed(context, 'login');
             },
@@ -91,11 +96,13 @@ class _UsersPageState extends State<UsersPage> {
           actions: <Widget>[
             Container(
               margin: const EdgeInsets.only(right: 16),
-              child: const Icon(
-                /* Icons.check_circle,
-                color: Palette.primary, */
-                Icons.offline_bolt,
-                color: Palette.accent,
+              child: Icon(
+                socketService.serverStatus == ServerStatus.online
+                    ? Icons.check_circle
+                    : Icons.offline_bolt,
+                color: socketService.serverStatus == ServerStatus.online
+                    ? Palette.primary
+                    : Palette.accent,
               ),
             )
           ],

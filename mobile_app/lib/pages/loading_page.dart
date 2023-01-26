@@ -6,6 +6,7 @@ import 'package:provider/provider.dart';
 import 'package:mobile_app/widgets/logo.dart';
 /* services */
 import 'package:mobile_app/services/auth_service.dart';
+import 'package:mobile_app/services/socket_service.dart';
 /* constants */
 import 'package:mobile_app/constants/palette.dart';
 
@@ -41,6 +42,7 @@ class LoadingPage extends StatelessWidget {
 
   Future _checkSignInState(BuildContext context) async {
     final authService = Provider.of<AuthService>(context, listen: false);
+    final socketService = Provider.of<SocketService>(context, listen: false);
 
     final auth = await authService.signInByToken();
 
@@ -51,6 +53,8 @@ class LoadingPage extends StatelessWidget {
       // ignore: use_build_context_synchronously
       return Navigator.pushReplacementNamed(context, 'login');
     }
+
+    socketService.connect();
 
     // ignore: use_build_context_synchronously
     Navigator.pushReplacementNamed(context, 'users');

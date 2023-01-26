@@ -7,6 +7,7 @@ import 'package:mobile_app/widgets/custom_input.dart';
 import 'package:mobile_app/widgets/custom_button.dart';
 /* services */
 import 'package:mobile_app/services/auth_service.dart';
+import 'package:mobile_app/services/socket_service.dart';
 
 class LoginForm extends StatefulWidget {
   const LoginForm({Key? key}) : super(key: key);
@@ -22,6 +23,7 @@ class LoginFormState extends State<LoginForm> {
   @override
   Widget build(BuildContext context) {
     final authService = Provider.of<AuthService>(context);
+    final socketService = Provider.of<SocketService>(context);
 
     return Container(
       alignment: Alignment.center,
@@ -52,6 +54,8 @@ class LoginFormState extends State<LoginForm> {
                 // ignore: use_build_context_synchronously
                 return showAlert(context, 'No authenticated', auth.message);
               }
+
+              socketService.connect();
 
               // ignore: use_build_context_synchronously
               Navigator.pushReplacementNamed(context, 'users');
